@@ -6,7 +6,7 @@
 /*   By: cbernaze <cbernaze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:36:00 by cbernaze          #+#    #+#             */
-/*   Updated: 2024/01/18 15:14:36 by cbernaze         ###   ########.fr       */
+/*   Updated: 2024/01/18 17:12:50 by cbernaze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ ScalarConverter::~ScalarConverter() {}
 
 static bool	isLiteralChar(std::string const literal)
 {
-	return (literal.length() == 1 && std::isprint(literal[0]));
+	return (literal.length() == 1 && std::isprint(literal[0]) && !std::isdigit(literal[0]));
 }
 
 static bool	isLiteralInt(std::string const literal)
@@ -71,6 +71,7 @@ static bool	isLiteralDouble(std::string const literal)
 {
 	size_t	i = 0;
 
+	if (literal == "-.f" || literal == ".f" || literal == "-.")
 	if (literal[i] == '-')
 		i++;
 	while (i < literal.length() && std::isdigit(literal[i]))
@@ -102,19 +103,33 @@ static std::string	checkType(std::string const literal)
 
 void	charConvert(char c)
 {
-	std::cout << "Char: " << c << std::endl;
+	std::cout << "char: " << c << std::endl;
+	std::cout << "int: " << static_cast<int>(c) << std::endl;
+	std::cout << "float: " << static_cast<float>(c) << ".0f" << std::endl;
+	std::cout << "double: " << static_cast<double>(c) << ".0" << std::endl;
 }
 void	intConvert(int i)
 {
-	std::cout << "Int: " << i << std::endl;
+	if (i > -1 && i < 256)
+	{
+		if (std::isprint(i))
+			std::cout << "char: " << static_cast<char>(i) << std::endl;
+		else
+			std::cout << "char: non displayable" << std::endl;
+	}
+	else
+		std::cout << "char: impossible" << std::endl;
+	std::cout << "int: " << i << std::endl;
+	std::cout << "float: " << static_cast<float>(i) << ".0f" << std::endl;
+	std::cout << "double: " << static_cast<double>(i) << ".0" << std::endl;
 }
 void	floatConvert(float f)
 {
-	std::cout << "Float: " << f << "f" << std::endl;
+	std::cout << "float: " << f << "f" << std::endl;
 }
 void	doubleConvert(double d)
 {
-	std::cout << "Double: " << d << std::endl;
+	std::cout << "double: " << d << std::endl;
 }
 
 //******************************************************************//
@@ -148,25 +163,21 @@ void	ScalarConverter::convert(std::string literal)
 					break;
 
 				case 1:
-					intConvert(std::atoi(literal.c_str()));
+					intConvert(std::strtol(literal.c_str(), &ptr, 10));
 					break;
 
 				case 2:
-					floatConvert(std::strtof(literal.c_str(), &ptr));
+					floatConvert(std::strtod(literal.c_str(), &ptr));
 					break;
 
 				case 3:
-					doubleConvert(std::strtod(literal.c_str(), &ptr));
+					doubleConvert(std::strtold(literal.c_str(), &ptr));
 			}
 		}
 	}
 	catch (std::string const& str)
 	{
 		std::cerr << str << std::endl;
-	}
-	catch (std::exception const& e)
-	{
-		std::cerr << e.what() << std::endl;
 	}
 }
 
