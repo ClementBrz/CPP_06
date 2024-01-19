@@ -6,16 +6,27 @@
 /*   By: cbernaze <cbernaze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:35:33 by cbernaze          #+#    #+#             */
-/*   Updated: 2024/01/18 14:53:02 by cbernaze         ###   ########.fr       */
+/*   Updated: 2024/01/19 14:31:15 by cbernaze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
+#include <limits>
 #include <string>
 #include <cctype>
 #include <cstdlib>
 #include <iostream>
+#include <cmath>
+#include <iomanip>
+
+typedef struct s_num
+{
+	bool	limitsChar;
+	bool	limitsInt;
+	bool	limitsFloat;
+	bool	limitsDouble;
+}				t_num;
 
 class ScalarConverter
 {
